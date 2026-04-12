@@ -1,0 +1,349 @@
+{
+  "project": "CarbonStamp",
+  "version": "1.0",
+  "lastUpdated": "2026-04-12",
+  "backlog": [
+    {
+      "id": "CS-000a",
+      "epic": "Project Setup",
+      "title": "Initialise project with Vite, React, TypeScript, and CRXJS",
+      "description": "Scaffold the extension project using Vite with @crxjs/vite-plugin. Configure TypeScript, React, and the Manifest V3 entry points (background service worker, content script, popup). Install core dependencies: react, react-dom, d3, webextension-polyfill.",
+      "priority": "P0",
+      "storyPoints": 2,
+      "acceptance": [
+        "npm create vite scaffolds a working TypeScript + React project",
+        "@crxjs/vite-plugin is installed and configured in vite.config.ts",
+        "manifest.json is valid Manifest V3 with permissions: storage, alarms, activeTab",
+        "host_permissions include ip2location.io, electricitymap.org, and thegreenwebfoundation.org",
+        "Background service worker, content script, and popup entry points are wired up",
+        "npm run dev starts the extension in development mode with hot reload",
+        "Extension loads successfully as an unpacked extension in Chrome"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-000b",
+      "epic": "Project Setup",
+      "title": "Configure environment variables and API key management",
+      "description": "Set up .env file for API keys (ip2location.io, Electricity Maps). Create .env.example with placeholder values. Add .env to .gitignore. Wire VITE_* env vars through to the background worker.",
+      "priority": "P0",
+      "storyPoints": 1,
+      "acceptance": [
+        ".env.example exists with VITE_IP2LOCATION_API_KEY and VITE_ELECTRICITY_MAPS_API_KEY placeholders",
+        ".env is in .gitignore",
+        "Environment variables are accessible in the background service worker via import.meta.env",
+        "Build fails clearly if required API keys are missing"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-000c",
+      "epic": "Project Setup",
+      "title": "Configure testing infrastructure (Vitest + Playwright)",
+      "description": "Install and configure Vitest for unit tests and Playwright for cross-browser E2E tests. Set up test directory structure, mock chrome.* APIs via webextensions-jsdom, and add npm scripts for test/test:e2e.",
+      "priority": "P0",
+      "storyPoints": 2,
+      "acceptance": [
+        "Vitest is configured with TypeScript support",
+        "webextensions-jsdom is installed for mocking chrome.* APIs in unit tests",
+        "Playwright is configured for Chrome and Firefox",
+        "npm run test runs unit tests",
+        "npm run test:e2e runs E2E tests",
+        "A sample smoke test passes in both frameworks"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-000d",
+      "epic": "Project Setup",
+      "title": "Set up project folder structure and shared modules",
+      "description": "Create the directory layout: src/background/, src/content/, src/popup/components/, src/popup/hooks/, src/shared/, tests/unit/, tests/e2e/, icons/. Scaffold shared/types.ts with core TypeScript interfaces and shared/constants.ts with grade thresholds, badge colours, and conversion factors.",
+      "priority": "P0",
+      "storyPoints": 1,
+      "acceptance": [
+        "All directories from the project structure exist",
+        "shared/types.ts exports interfaces: PageResult, DailyTotal, GeoCache, GreenCache, ResourceEntry",
+        "shared/constants.ts exports grade thresholds, badge colour map, and real-world comparison factors",
+        "tsconfig.json path aliases are configured for @background/, @content/, @popup/, @shared/"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-001",
+      "epic": "Per-Page Analysis",
+      "title": "Collect page resource data via PerformanceResourceTiming API",
+      "description": "Content script reads window.performance.getEntriesByType('resource') on page load complete, extracts transferSize and decodedBodySize per resource, and categorises by type (image, script, font, CSS, other).",
+      "priority": "P0",
+      "storyPoints": 3,
+      "acceptance": [
+        "Content script fires after page load complete",
+        "All resource entries are captured with transferSize in bytes",
+        "Resources are categorised into: images, scripts, fonts, CSS, other",
+        "Data is sent to background worker via chrome.runtime.sendMessage"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-002",
+      "epic": "Per-Page Analysis",
+      "title": "IP geolocation lookup for server hosting country",
+      "description": "Background worker extracts domain from page URL and resolves hosting country via ip2location.io API. Results are cached in chrome.storage.local for 24 hours.",
+      "priority": "P0",
+      "storyPoints": 2,
+      "acceptance": [
+        "Domain extracted from document.location.hostname",
+        "ip2location.io API called with hostname (not IP)",
+        "Response cached under geo_cache:{domain} with 24-hour expiry",
+        "Cached result is used on subsequent lookups within TTL"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-003",
+      "epic": "Per-Page Analysis",
+      "title": "Carbon intensity lookup via Electricity Maps API",
+      "description": "Background worker maps the hosting country to real-time grid carbon intensity (gCO2/kWh) using the Electricity Maps API. Results are cached hourly.",
+      "priority": "P0",
+      "storyPoints": 2,
+      "acceptance": [
+        "Electricity Maps API called with country code from geolocation result",
+        "Returns carbon intensity in gCO2/kWh",
+        "Response cached for 1 hour",
+        "Fallback to global average (442 gCO2/kWh) if API is unavailable"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-004",
+      "epic": "Per-Page Analysis",
+      "title": "Green hosting check via Green Web Foundation API",
+      "description": "Background worker checks whether the page's hosting provider is on the Green Web Foundation green hosting registry. Returns a boolean. Cached per domain.",
+      "priority": "P0",
+      "storyPoints": 1,
+      "acceptance": [
+        "Green Web Foundation API called with domain",
+        "Boolean is_green stored under green_cache:{domain}",
+        "Cache has configurable TTL (default 7 days)",
+        "Green host status is factored into carbon calculation"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-005",
+      "epic": "Per-Page Analysis",
+      "title": "Carbon calculation engine",
+      "description": "Implement the websitecarbon.com open methodology: co2_grams = (data_gb * 0.81 * visitor_factor * carbon_intensity) + (data_gb * 0.52 * 0.25 * 442). Returning visitor adjustment is 0.75x for previously visited pages. Green hosting zeroes out data centre energy component.",
+      "priority": "P0",
+      "storyPoints": 3,
+      "acceptance": [
+        "Formula matches websitecarbon.com methodology",
+        "Returning visitor factor (0.75x) applied for repeat visits",
+        "Green hosting multiplier zeroes data centre energy portion",
+        "Output includes: co2_grams, energy_kwh, transfer_kb, grade"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-006",
+      "epic": "Per-Page Analysis",
+      "title": "Letter grade assignment (A+ through F)",
+      "description": "Assign a letter grade based on CO2 per page load, using thresholds aligned with websitecarbon.com methodology for credibility. Generate percentile comparison against all previously analysed pages.",
+      "priority": "P0",
+      "storyPoints": 2,
+      "acceptance": [
+        "Grades range from A+ (cleanest) to F (dirtiest)",
+        "Thresholds are consistent with websitecarbon.com grading",
+        "Percentile comparison text generated: 'heavier than X% of N pages analysed'",
+        "Grade stored alongside page result in chrome.storage.local"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-007",
+      "epic": "Per-Page Analysis",
+      "title": "Store page results in chrome.storage.local",
+      "description": "Persist per-page analysis results using the schema: page:{domain}:{date} -> {grade, co2_grams, transfer_kb, visits, green_host}. Update running totals under totals:{YYYY-MM-DD}.",
+      "priority": "P0",
+      "storyPoints": 2,
+      "acceptance": [
+        "Page results stored under page:{domain}:{date} key",
+        "Daily totals updated under totals:{YYYY-MM-DD} key",
+        "Visit count incremented on repeat visits to same domain/date",
+        "Storage remains within chrome.storage.local 10MB limit"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-008",
+      "epic": "Per-Page Analysis",
+      "title": "Extension badge update with page grade",
+      "description": "Update the extension icon badge text and colour after each page analysis. Use chrome.action.setBadgeText and setBadgeBackgroundColor. Colour scheme: #27AE60 (A+/A), #F39C12 (B/C), #E74C3C (D/F).",
+      "priority": "P0",
+      "storyPoints": 1,
+      "acceptance": [
+        "Badge text shows current page grade (A+, A, B, C, D, F)",
+        "Badge background colour is green (#27AE60) for A+/A",
+        "Badge background colour is amber (#F39C12) for B/C",
+        "Badge background colour is red (#E74C3C) for D/F",
+        "Badge updates automatically on each page load"
+      ],
+      "evening": 1
+    },
+    {
+      "id": "CS-009",
+      "epic": "Popup UI",
+      "title": "Current page score and grade display",
+      "description": "Popup shows the current page's carbon score, letter grade, transfer size (KB/MB), estimated energy (kWh), CO2 equivalent (grams), green hosting status, and percentile comparison.",
+      "priority": "P0",
+      "storyPoints": 3,
+      "acceptance": [
+        "Displays letter grade with colour-coded badge",
+        "Shows total transfer size in KB or MB",
+        "Shows estimated CO2 in grams",
+        "Shows estimated energy in kWh",
+        "Shows green hosting status (green/conventional)",
+        "Shows percentile comparison text"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-010",
+      "epic": "Popup UI",
+      "title": "Resource breakdown chart",
+      "description": "Show a breakdown of the current page's resources by type (images, scripts, fonts, CSS, other) with transfer sizes, so users can see what is heaviest.",
+      "priority": "P1",
+      "storyPoints": 2,
+      "acceptance": [
+        "Breakdown shows each resource category with size in KB",
+        "Categories: images, scripts, fonts, CSS, other",
+        "Sorted by size descending (heaviest first)",
+        "Visual bar or chart representation of proportions"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-011",
+      "epic": "Running Totals Dashboard",
+      "title": "Historical totals view (daily/weekly/monthly)",
+      "description": "Dashboard section in popup showing cumulative browsing footprint aggregated by day, week, and month in grams CO2.",
+      "priority": "P0",
+      "storyPoints": 3,
+      "acceptance": [
+        "Toggle between daily, weekly, and monthly views",
+        "Displays total CO2 in grams for selected period",
+        "Displays total page count for selected period",
+        "Data sourced from totals:{YYYY-MM-DD} storage entries"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-012",
+      "epic": "Running Totals Dashboard",
+      "title": "Top 10 heaviest sites chart (D3.js)",
+      "description": "Horizontal bar chart rendered with D3.js showing the user's top 10 heaviest sites ranked by average carbon per visit.",
+      "priority": "P0",
+      "storyPoints": 3,
+      "acceptance": [
+        "D3.js horizontal bar chart renders in popup",
+        "Shows top 10 domains ranked by average CO2 per visit",
+        "Each bar labelled with domain name and average grams CO2",
+        "Chart is responsive within popup dimensions"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-013",
+      "epic": "Running Totals Dashboard",
+      "title": "Annual estimate with real-world comparisons",
+      "description": "Extrapolate current browsing data to an estimated annual footprint with relatable comparisons: km driven, flights taken, meals of beef.",
+      "priority": "P1",
+      "storyPoints": 2,
+      "acceptance": [
+        "Annual CO2 estimate extrapolated from available data",
+        "Comparison to km driven in an average car",
+        "Comparison to short-haul flights",
+        "Comparison to meals of beef",
+        "Comparisons use standard conversion factors"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-014",
+      "epic": "Running Totals Dashboard",
+      "title": "Export shareable footprint summary",
+      "description": "Export button generates a 'My browsing footprint report' as a shareable summary (image or text) showing key stats from the user's browsing history.",
+      "priority": "P2",
+      "storyPoints": 2,
+      "acceptance": [
+        "Export button visible in dashboard view",
+        "Generates a summary with total CO2, page count, top sites, grade distribution",
+        "Output is shareable (clipboard text or downloadable image)",
+        "Includes CarbonStamp branding"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-015",
+      "epic": "Developer Mode",
+      "title": "Per-resource breakdown with optimisation suggestions",
+      "description": "Developer mode shows granular per-resource data and flags optimisation opportunities: uncompressed images, render-blocking scripts, no HTTP/2, missing CDN.",
+      "priority": "P2",
+      "storyPoints": 5,
+      "acceptance": [
+        "Toggle to enable developer mode in popup",
+        "Lists individual resources with size, type, and protocol",
+        "Flags uncompressed images (no content-encoding)",
+        "Flags render-blocking scripts",
+        "Flags resources not served over HTTP/2",
+        "Flags resources not served via CDN",
+        "Shows estimated carbon saving if optimisations applied"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-016",
+      "epic": "Data Management",
+      "title": "90-day data cleanup via chrome.alarms",
+      "description": "Implement a daily cleanup job using chrome.alarms API to prune storage entries older than 90 days, keeping chrome.storage.local within the 10MB limit.",
+      "priority": "P1",
+      "storyPoints": 2,
+      "acceptance": [
+        "chrome.alarms fires daily cleanup",
+        "Entries with dates older than 90 days are removed",
+        "Both page:{domain}:{date} and totals:{YYYY-MM-DD} entries are pruned",
+        "Expired geo_cache and green_cache entries are also cleaned"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-017",
+      "epic": "Cross-Browser",
+      "title": "Firefox compatibility",
+      "description": "Ensure the extension works on Firefox using browser.* namespace or webextension-polyfill. Test and adapt manifest for Firefox Add-ons submission.",
+      "priority": "P1",
+      "storyPoints": 3,
+      "acceptance": [
+        "Extension loads and runs correctly in Firefox",
+        "All chrome.* API calls work via browser.* or polyfill",
+        "Manifest v2/v3 compatibility handled",
+        "Submitted to Firefox Add-ons store"
+      ],
+      "evening": 2
+    },
+    {
+      "id": "CS-018",
+      "epic": "Distribution",
+      "title": "Publish to Chrome Web Store",
+      "description": "Package extension and publish to Chrome Web Store with store listing that includes the Green Atlas narrative.",
+      "priority": "P1",
+      "storyPoints": 1,
+      "acceptance": [
+        "Extension packaged as .zip for Chrome Web Store",
+        "Store listing includes description, screenshots, and Green Atlas narrative",
+        "Privacy policy reflects local-only data storage",
+        "Published and publicly available"
+      ],
+      "evening": 2
+    }
+  ]
+}

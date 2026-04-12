@@ -1,0 +1,555 @@
+{
+  "project": "CarbonStamp",
+  "version": "1.0",
+  "lastUpdated": "2026-04-12",
+  "testStrategy": {
+    "unitTestFramework": "Vitest",
+    "e2eFramework": "Playwright",
+    "extensionTestingLibrary": "webextensions-jsdom",
+    "coverageTarget": "80%",
+    "browsers": ["Chrome", "Firefox"]
+  },
+  "testSuites": [
+    {
+      "id": "TS-000",
+      "suite": "Project Setup & Build",
+      "type": "setup",
+      "tests": [
+        {
+          "id": "T-S01",
+          "title": "Project installs dependencies without errors",
+          "given": "A clean clone of the repository",
+          "when": "npm install is run",
+          "then": "All dependencies install successfully with no peer dependency conflicts",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S02",
+          "title": "TypeScript compiles without errors",
+          "given": "Project with all source files",
+          "when": "npx tsc --noEmit is run",
+          "then": "Zero type errors reported",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S03",
+          "title": "Dev build starts and produces loadable extension",
+          "given": "API keys configured in .env",
+          "when": "npm run dev is run",
+          "then": "Vite dev server starts, dist/ contains a valid manifest.json, and extension loads in Chrome without errors",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S04",
+          "title": "Production build completes successfully",
+          "given": "API keys configured in .env",
+          "when": "npm run build is run",
+          "then": "dist/ contains minified bundles for background worker, content script, and popup with valid manifest.json",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S05",
+          "title": "Environment variables are injected into background worker",
+          "given": "VITE_IP2LOCATION_API_KEY and VITE_ELECTRICITY_MAPS_API_KEY set in .env",
+          "when": "Background worker accesses import.meta.env",
+          "then": "Both API key values are accessible and non-empty",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S06",
+          "title": ".env is excluded from version control",
+          "given": "A .env file exists with real API keys",
+          "when": "git status is run",
+          "then": ".env does not appear in tracked or untracked files",
+          "priority": "high"
+        },
+        {
+          "id": "T-S07",
+          "title": "Extension loads as unpacked in Chrome",
+          "given": "Production build completed",
+          "when": "dist/ is loaded via chrome://extensions as unpacked extension",
+          "then": "Extension appears with correct name, icon, and no console errors",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S08",
+          "title": "Extension loads as temporary add-on in Firefox",
+          "given": "Production build completed",
+          "when": "dist/manifest.json is loaded via about:debugging",
+          "then": "Extension appears with correct name, icon, and no console errors",
+          "priority": "critical"
+        },
+        {
+          "id": "T-S09",
+          "title": "Shared type interfaces are importable across all modules",
+          "given": "Types defined in shared/types.ts",
+          "when": "Background, content, and popup modules import from @shared/types",
+          "then": "Imports resolve correctly and TypeScript validates usage",
+          "priority": "high"
+        },
+        {
+          "id": "T-S10",
+          "title": "Package script produces store-ready zip files",
+          "given": "Production build completed",
+          "when": "npm run package is run",
+          "then": "Zip files are created for Chrome and Firefox submission, containing all required assets",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "id": "TS-001",
+      "suite": "Content Script — Resource Collection",
+      "type": "unit",
+      "tests": [
+        {
+          "id": "T-001",
+          "title": "Captures all PerformanceResourceTiming entries on page load",
+          "given": "A page with 15 resources (images, scripts, CSS, fonts)",
+          "when": "Page load completes and content script fires",
+          "then": "All 15 resource entries are captured with transferSize values",
+          "priority": "critical"
+        },
+        {
+          "id": "T-002",
+          "title": "Categorises resources by type correctly",
+          "given": "Resource entries with various initiatorType values",
+          "when": "Content script processes the entries",
+          "then": "Each resource is categorised as image, script, font, CSS, or other",
+          "priority": "critical"
+        },
+        {
+          "id": "T-003",
+          "title": "Handles pages with zero resources gracefully",
+          "given": "A page with no external resources",
+          "when": "Content script fires",
+          "then": "Empty resource list is sent to background worker without error",
+          "priority": "medium"
+        },
+        {
+          "id": "T-004",
+          "title": "Handles resources with transferSize of 0 (cache hits)",
+          "given": "Resources served from browser cache with transferSize = 0",
+          "when": "Content script processes entries",
+          "then": "Zero-size resources are included but flagged as cached",
+          "priority": "medium"
+        },
+        {
+          "id": "T-005",
+          "title": "Sends collected data to background worker",
+          "given": "Resources have been collected and categorised",
+          "when": "Content script completes processing",
+          "then": "chrome.runtime.sendMessage is called with structured payload",
+          "priority": "critical"
+        }
+      ]
+    },
+    {
+      "id": "TS-002",
+      "suite": "Background Worker — API Integrations",
+      "type": "unit",
+      "tests": [
+        {
+          "id": "T-006",
+          "title": "Resolves hosting country via ip2location.io",
+          "given": "A domain name 'example.com'",
+          "when": "Geolocation lookup is triggered",
+          "then": "API returns country code and result is cached for 24 hours",
+          "priority": "critical"
+        },
+        {
+          "id": "T-007",
+          "title": "Uses cached geolocation within TTL",
+          "given": "A geo_cache entry for 'example.com' less than 24 hours old",
+          "when": "Same domain is looked up again",
+          "then": "Cached result is returned; no API call is made",
+          "priority": "critical"
+        },
+        {
+          "id": "T-008",
+          "title": "Refreshes geolocation after cache expiry",
+          "given": "A geo_cache entry for 'example.com' older than 24 hours",
+          "when": "Same domain is looked up again",
+          "then": "API is called and cache is refreshed",
+          "priority": "high"
+        },
+        {
+          "id": "T-009",
+          "title": "Fetches carbon intensity from Electricity Maps API",
+          "given": "Country code 'NO' (Norway)",
+          "when": "Carbon intensity lookup is triggered",
+          "then": "Returns ~30 gCO2/kWh and result is cached for 1 hour",
+          "priority": "critical"
+        },
+        {
+          "id": "T-010",
+          "title": "Falls back to global average when Electricity Maps API fails",
+          "given": "Electricity Maps API returns error or times out",
+          "when": "Carbon intensity lookup is triggered",
+          "then": "Falls back to 442 gCO2/kWh (global average)",
+          "priority": "high"
+        },
+        {
+          "id": "T-011",
+          "title": "Checks green hosting via Green Web Foundation API",
+          "given": "A domain 'google.com' known to be green-hosted",
+          "when": "Green hosting check is triggered",
+          "then": "Returns is_green: true and caches result",
+          "priority": "critical"
+        },
+        {
+          "id": "T-012",
+          "title": "Handles Green Web Foundation API failure",
+          "given": "Green Web Foundation API is unreachable",
+          "when": "Green hosting check is triggered",
+          "then": "Defaults to is_green: false (conservative estimate)",
+          "priority": "high"
+        },
+        {
+          "id": "T-013",
+          "title": "Handles ip2location.io API failure",
+          "given": "ip2location.io API returns error",
+          "when": "Geolocation lookup is triggered",
+          "then": "Falls back gracefully; uses global average carbon intensity",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "id": "TS-003",
+      "suite": "Carbon Calculation Engine",
+      "type": "unit",
+      "tests": [
+        {
+          "id": "T-014",
+          "title": "Calculates CO2 correctly for a first-time visit",
+          "given": "Transfer size: 2MB, carbon intensity: 442 gCO2/kWh, not green-hosted",
+          "when": "Carbon calculation is run with visitor_factor = 1.0",
+          "then": "co2_grams matches formula: (data_gb * 0.81 * 1.0 * 442) + (data_gb * 0.52 * 0.25 * 442)",
+          "priority": "critical"
+        },
+        {
+          "id": "T-015",
+          "title": "Applies returning visitor adjustment",
+          "given": "Same page visited a second time",
+          "when": "Carbon calculation is run",
+          "then": "visitor_factor is 0.75, reducing the score by 25%",
+          "priority": "critical"
+        },
+        {
+          "id": "T-016",
+          "title": "Applies green hosting multiplier",
+          "given": "Page is on a green-hosted domain",
+          "when": "Carbon calculation is run",
+          "then": "Data centre energy component is zeroed out",
+          "priority": "critical"
+        },
+        {
+          "id": "T-017",
+          "title": "Handles zero transfer size",
+          "given": "Transfer size is 0 bytes (fully cached page)",
+          "when": "Carbon calculation is run",
+          "then": "Returns 0 grams CO2 without error",
+          "priority": "medium"
+        },
+        {
+          "id": "T-018",
+          "title": "Calculates correctly for low-carbon grids",
+          "given": "Transfer size: 2MB, carbon intensity: 30 gCO2/kWh (Norway)",
+          "when": "Carbon calculation is run",
+          "then": "CO2 output is significantly lower than global average calculation",
+          "priority": "high"
+        },
+        {
+          "id": "T-019",
+          "title": "Calculates correctly for high-carbon grids",
+          "given": "Transfer size: 2MB, carbon intensity: 700 gCO2/kWh (Poland)",
+          "when": "Carbon calculation is run",
+          "then": "CO2 output is significantly higher than global average calculation",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "id": "TS-004",
+      "suite": "Grading System",
+      "type": "unit",
+      "tests": [
+        {
+          "id": "T-020",
+          "title": "Assigns A+ grade for very low carbon pages",
+          "given": "CO2 result under the A+ threshold",
+          "when": "Grade is assigned",
+          "then": "Returns 'A+'",
+          "priority": "critical"
+        },
+        {
+          "id": "T-021",
+          "title": "Assigns F grade for very high carbon pages",
+          "given": "CO2 result above the F threshold",
+          "when": "Grade is assigned",
+          "then": "Returns 'F'",
+          "priority": "critical"
+        },
+        {
+          "id": "T-022",
+          "title": "Calculates correct percentile ranking",
+          "given": "100 previously analysed pages with known CO2 values",
+          "when": "A new page is graded",
+          "then": "Percentile text reads 'heavier than X% of 101 pages analysed' and X is accurate",
+          "priority": "high"
+        },
+        {
+          "id": "T-023",
+          "title": "Grade boundaries are contiguous with no gaps",
+          "given": "Any valid CO2 value >= 0",
+          "when": "Grade is assigned",
+          "then": "Exactly one grade is returned (no overlaps or gaps in thresholds)",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "id": "TS-005",
+      "suite": "Data Storage",
+      "type": "unit",
+      "tests": [
+        {
+          "id": "T-024",
+          "title": "Stores page result under correct key schema",
+          "given": "Analysis complete for example.com on 2026-04-12",
+          "when": "Result is persisted",
+          "then": "Stored under key 'page:example.com:2026-04-12' with expected fields",
+          "priority": "critical"
+        },
+        {
+          "id": "T-025",
+          "title": "Increments visit count on repeat visits",
+          "given": "Existing entry for page:example.com:2026-04-12 with visits: 2",
+          "when": "Same page is visited again on same date",
+          "then": "visits field incremented to 3; CO2 values are averaged/accumulated",
+          "priority": "high"
+        },
+        {
+          "id": "T-026",
+          "title": "Updates daily totals correctly",
+          "given": "Existing totals for 2026-04-12 with total_co2_grams: 50, page_count: 10",
+          "when": "New page analysed with 3 grams CO2",
+          "then": "totals:2026-04-12 updated to total_co2_grams: 53, page_count: 11",
+          "priority": "critical"
+        },
+        {
+          "id": "T-027",
+          "title": "Prunes entries older than 90 days",
+          "given": "Storage contains entries from 100 days ago",
+          "when": "Daily cleanup alarm fires",
+          "then": "Entries older than 90 days are removed; recent entries remain",
+          "priority": "high"
+        },
+        {
+          "id": "T-028",
+          "title": "Prunes expired cache entries during cleanup",
+          "given": "Expired geo_cache and green_cache entries exist",
+          "when": "Daily cleanup alarm fires",
+          "then": "Expired cache entries are removed",
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "id": "TS-006",
+      "suite": "Badge Display",
+      "type": "integration",
+      "tests": [
+        {
+          "id": "T-029",
+          "title": "Badge shows correct grade text",
+          "given": "Page analysis returns grade 'B'",
+          "when": "Badge is updated",
+          "then": "chrome.action.setBadgeText called with 'B'",
+          "priority": "critical"
+        },
+        {
+          "id": "T-030",
+          "title": "Badge colour is green for A+/A grades",
+          "given": "Page analysis returns grade 'A'",
+          "when": "Badge is updated",
+          "then": "chrome.action.setBadgeBackgroundColor called with '#27AE60'",
+          "priority": "high"
+        },
+        {
+          "id": "T-031",
+          "title": "Badge colour is amber for B/C grades",
+          "given": "Page analysis returns grade 'C'",
+          "when": "Badge is updated",
+          "then": "chrome.action.setBadgeBackgroundColor called with '#F39C12'",
+          "priority": "high"
+        },
+        {
+          "id": "T-032",
+          "title": "Badge colour is red for D/F grades",
+          "given": "Page analysis returns grade 'F'",
+          "when": "Badge is updated",
+          "then": "chrome.action.setBadgeBackgroundColor called with '#E74C3C'",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "id": "TS-007",
+      "suite": "Popup UI",
+      "type": "integration",
+      "tests": [
+        {
+          "id": "T-033",
+          "title": "Popup displays current page score",
+          "given": "Current tab has been analysed",
+          "when": "User opens the popup",
+          "then": "Grade, CO2 grams, transfer size, energy, and green host status are displayed",
+          "priority": "critical"
+        },
+        {
+          "id": "T-034",
+          "title": "Popup shows resource breakdown",
+          "given": "Current page has resources across multiple categories",
+          "when": "User views resource breakdown",
+          "then": "Breakdown shows images, scripts, fonts, CSS, other with sizes",
+          "priority": "high"
+        },
+        {
+          "id": "T-035",
+          "title": "Dashboard shows daily/weekly/monthly totals",
+          "given": "User has 7 days of browsing history",
+          "when": "User switches between daily/weekly/monthly views",
+          "then": "Correct aggregated CO2 and page counts are shown",
+          "priority": "critical"
+        },
+        {
+          "id": "T-036",
+          "title": "Top 10 chart renders with D3.js",
+          "given": "User has visited 15+ unique domains",
+          "when": "Dashboard is opened",
+          "then": "D3.js horizontal bar chart shows top 10 by average CO2 per visit",
+          "priority": "critical"
+        },
+        {
+          "id": "T-037",
+          "title": "Top 10 chart handles fewer than 10 domains",
+          "given": "User has visited only 3 unique domains",
+          "when": "Dashboard is opened",
+          "then": "Chart shows 3 bars without error",
+          "priority": "medium"
+        },
+        {
+          "id": "T-038",
+          "title": "Annual estimate displays with real-world comparisons",
+          "given": "User has at least 7 days of data",
+          "when": "Annual estimate section is viewed",
+          "then": "Shows estimated annual CO2, km driven, flights, and meals of beef equivalents",
+          "priority": "high"
+        },
+        {
+          "id": "T-039",
+          "title": "Export generates shareable summary",
+          "given": "User has browsing history data",
+          "when": "User clicks export button",
+          "then": "Summary is copied to clipboard or downloaded with key stats and CarbonStamp branding",
+          "priority": "medium"
+        },
+        {
+          "id": "T-040",
+          "title": "Popup handles no data state",
+          "given": "Fresh install with no browsing history",
+          "when": "User opens popup",
+          "then": "Friendly empty state message is shown; no errors",
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "id": "TS-008",
+      "suite": "Developer Mode",
+      "type": "integration",
+      "tests": [
+        {
+          "id": "T-041",
+          "title": "Developer mode toggle enables detailed view",
+          "given": "User is in standard mode",
+          "when": "Developer mode is toggled on",
+          "then": "Per-resource list with optimisation flags is shown",
+          "priority": "high"
+        },
+        {
+          "id": "T-042",
+          "title": "Flags uncompressed images correctly",
+          "given": "Page has images without content-encoding",
+          "when": "Developer mode analyses resources",
+          "then": "Uncompressed images are flagged with estimated carbon saving",
+          "priority": "medium"
+        },
+        {
+          "id": "T-043",
+          "title": "Flags render-blocking scripts",
+          "given": "Page has scripts without async/defer attributes",
+          "when": "Developer mode analyses resources",
+          "then": "Render-blocking scripts are flagged",
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "id": "TS-009",
+      "suite": "Cross-Browser Compatibility",
+      "type": "e2e",
+      "tests": [
+        {
+          "id": "T-044",
+          "title": "Extension loads and runs in Chrome",
+          "given": "Extension is installed in Chrome",
+          "when": "User navigates to any webpage",
+          "then": "Badge updates, popup shows results, storage is populated",
+          "priority": "critical"
+        },
+        {
+          "id": "T-045",
+          "title": "Extension loads and runs in Firefox",
+          "given": "Extension is installed in Firefox",
+          "when": "User navigates to any webpage",
+          "then": "Badge updates, popup shows results, storage is populated",
+          "priority": "critical"
+        },
+        {
+          "id": "T-046",
+          "title": "PerformanceResourceTiming API works across browsers",
+          "given": "Extension running in Chrome and Firefox",
+          "when": "Page with resources is loaded",
+          "then": "transferSize values are captured in both browsers",
+          "priority": "critical"
+        }
+      ]
+    },
+    {
+      "id": "TS-010",
+      "suite": "Privacy & Data Limits",
+      "type": "unit",
+      "tests": [
+        {
+          "id": "T-047",
+          "title": "No data is sent to any external server (except APIs)",
+          "given": "Extension is running and analysing pages",
+          "when": "Network requests are monitored",
+          "then": "Only calls to ip2location.io, Electricity Maps, and Green Web Foundation are made",
+          "priority": "critical"
+        },
+        {
+          "id": "T-048",
+          "title": "Storage does not exceed 10MB limit",
+          "given": "90 days of heavy browsing (500 unique domains/day)",
+          "when": "Storage usage is measured",
+          "then": "Total storage remains well under 10MB",
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}
