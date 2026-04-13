@@ -1,19 +1,18 @@
+import { buildPayload } from "./collect";
+
 window.addEventListener("load", () => {
-  const resources = performance.getEntriesByType(
+  const entries = performance.getEntriesByType(
     "resource"
   ) as PerformanceResourceTiming[];
 
-  const payload = resources.map((r) => ({
+  const rawEntries = entries.map((r) => ({
     name: r.name,
     initiatorType: r.initiatorType,
     transferSize: r.transferSize,
     decodedBodySize: r.decodedBodySize,
   }));
 
-  chrome.runtime.sendMessage({
-    type: "PAGE_RESOURCES",
-    domain: document.location.hostname,
-    resources: payload,
-    totalTransferSize: payload.reduce((sum, r) => sum + r.transferSize, 0),
-  });
+  const payload = buildPayload(document.location.hostname, rawEntries);
+
+  chrome.runtime.sendMessage(payload);
 });
