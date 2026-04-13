@@ -1,3 +1,7 @@
+import { validateEnv } from "@shared/env";
+
+validateEnv();
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === "PAGE_RESOURCES") {
     // TODO: Process resources, call APIs, calculate carbon, update badge
