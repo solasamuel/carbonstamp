@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
     "package": "npm run build && cd dist && zip -r ../carbonstamp-chrome.zip ."
   },
   "repository": {
@@ -27,13 +31,17 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.4.0",
+    "@playwright/test": "^1.59.1",
     "@types/chrome": "^0.1.40",
     "@types/d3": "^7.4.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/webextension-polyfill": "^0.12.5",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.4",
+    "playwright": "^1.59.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vitest": "^3.2.4"
   }
 }
