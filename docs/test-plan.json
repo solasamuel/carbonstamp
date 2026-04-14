@@ -259,7 +259,7 @@
           "when": "Carbon calculation is run with visitor_factor = 1.0",
           "then": "co2_grams matches formula: (data_gb * 0.81 * 1.0 * 442) + (data_gb * 0.52 * 0.25 * 442)",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-015",
@@ -268,7 +268,7 @@
           "when": "Carbon calculation is run",
           "then": "visitor_factor is 0.75, reducing the score by 25%",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-016",
@@ -277,7 +277,7 @@
           "when": "Carbon calculation is run",
           "then": "Data centre energy component is zeroed out",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-017",
@@ -286,7 +286,7 @@
           "when": "Carbon calculation is run",
           "then": "Returns 0 grams CO2 without error",
           "priority": "medium",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-018",
@@ -295,7 +295,7 @@
           "when": "Carbon calculation is run",
           "then": "CO2 output is significantly lower than global average calculation",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-019",
@@ -304,11 +304,11 @@
           "when": "Carbon calculation is run",
           "then": "CO2 output is significantly higher than global average calculation",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         }
       ],
-      "status": "not-started",
-      "testFile": null
+      "status": "passing",
+      "testFile": "tests/unit/carbon-calculator.test.ts"
     },
     {
       "id": "TS-004",
@@ -322,7 +322,7 @@
           "when": "Grade is assigned",
           "then": "Returns 'A+'",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-021",
@@ -331,7 +331,7 @@
           "when": "Grade is assigned",
           "then": "Returns 'F'",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-022",
@@ -340,7 +340,7 @@
           "when": "A new page is graded",
           "then": "Percentile text reads 'heavier than X% of 101 pages analysed' and X is accurate",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-023",
@@ -349,11 +349,11 @@
           "when": "Grade is assigned",
           "then": "Exactly one grade is returned (no overlaps or gaps in thresholds)",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         }
       ],
-      "status": "not-started",
-      "testFile": null
+      "status": "passing",
+      "testFile": "tests/unit/grading.test.ts"
     },
     {
       "id": "TS-005",
@@ -367,7 +367,7 @@
           "when": "Result is persisted",
           "then": "Stored under key 'page:example.com:2026-04-12' with expected fields",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-025",
@@ -376,7 +376,7 @@
           "when": "Same page is visited again on same date",
           "then": "visits field incremented to 3; CO2 values are averaged/accumulated",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-026",
@@ -385,7 +385,7 @@
           "when": "New page analysed with 3 grams CO2",
           "then": "totals:2026-04-12 updated to total_co2_grams: 53, page_count: 11",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-027",
@@ -394,7 +394,7 @@
           "when": "Daily cleanup alarm fires",
           "then": "Entries older than 90 days are removed; recent entries remain",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-028",
@@ -403,11 +403,11 @@
           "when": "Daily cleanup alarm fires",
           "then": "Expired cache entries are removed",
           "priority": "medium",
-          "status": "not-implemented"
+          "status": "passing"
         }
       ],
-      "status": "not-started",
-      "testFile": null
+      "status": "passing",
+      "testFile": "tests/unit/storage.test.ts"
     },
     {
       "id": "TS-006",
@@ -421,7 +421,7 @@
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeText called with 'B'",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-030",
@@ -430,7 +430,7 @@
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeBackgroundColor called with '#27AE60'",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-031",
@@ -439,7 +439,7 @@
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeBackgroundColor called with '#F39C12'",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-032",
@@ -448,11 +448,11 @@
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeBackgroundColor called with '#E74C3C'",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         }
       ],
-      "status": "not-started",
-      "testFile": null
+      "status": "passing",
+      "testFile": "tests/unit/badge.test.ts"
     },
     {
       "id": "TS-007",
@@ -636,5 +636,5 @@
     }
   ],
   "totalTests": 58,
-  "passingTests": 23
+  "passingTests": 42
 }

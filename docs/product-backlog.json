@@ -159,9 +159,9 @@
       "description": "Implement the websitecarbon.com open methodology: co2_grams = (data_gb * 0.81 * visitor_factor * carbon_intensity) + (data_gb * 0.52 * 0.25 * 442). Returning visitor adjustment is 0.75x for previously visited pages. Green hosting zeroes out data centre energy component.",
       "priority": "P0",
       "storyPoints": 3,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null,
+      "status": "done",
+      "branch": "feature/CS-005-carbon-calculator",
+      "completedDate": "2026-04-14",
       "acceptance": [
         "Formula matches websitecarbon.com methodology",
         "Returning visitor factor (0.75x) applied for repeat visits",
@@ -177,9 +177,9 @@
       "description": "Assign a letter grade based on CO2 per page load, using thresholds aligned with websitecarbon.com methodology for credibility. Generate percentile comparison against all previously analysed pages.",
       "priority": "P0",
       "storyPoints": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null,
+      "status": "done",
+      "branch": "feature/CS-006-grading",
+      "completedDate": "2026-04-14",
       "acceptance": [
         "Grades range from A+ (cleanest) to F (dirtiest)",
         "Thresholds are consistent with websitecarbon.com grading",
@@ -202,9 +202,9 @@
         "Storage remains within chrome.storage.local 10MB limit"
       ],
       "evening": 1,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-007-storage",
+      "completedDate": "2026-04-14"
     },
     {
       "id": "CS-008",
@@ -221,9 +221,9 @@
         "Badge updates automatically on each page load"
       ],
       "evening": 1,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-008-badge",
+      "completedDate": "2026-04-14"
     },
     {
       "id": "CS-009",
