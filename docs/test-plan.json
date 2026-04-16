@@ -1,7 +1,7 @@
 {
   "project": "CarbonStamp",
   "version": "1.0",
-  "lastUpdated": "2026-04-14",
+  "lastUpdated": "2026-04-16",
   "testStrategy": {
     "unitTestFramework": "Vitest",
     "e2eFramework": "Playwright",
@@ -466,7 +466,7 @@
           "when": "User opens the popup",
           "then": "Grade, CO2 grams, transfer size, energy, and green host status are displayed",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-034",
@@ -475,7 +475,7 @@
           "when": "User views resource breakdown",
           "then": "Breakdown shows images, scripts, fonts, CSS, other with sizes",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-035",
@@ -484,7 +484,7 @@
           "when": "User switches between daily/weekly/monthly views",
           "then": "Correct aggregated CO2 and page counts are shown",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-036",
@@ -493,7 +493,7 @@
           "when": "Dashboard is opened",
           "then": "D3.js horizontal bar chart shows top 10 by average CO2 per visit",
           "priority": "critical",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-037",
@@ -502,7 +502,7 @@
           "when": "Dashboard is opened",
           "then": "Chart shows 3 bars without error",
           "priority": "medium",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-038",
@@ -511,7 +511,7 @@
           "when": "Annual estimate section is viewed",
           "then": "Shows estimated annual CO2, km driven, flights, and meals of beef equivalents",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-039",
@@ -520,7 +520,7 @@
           "when": "User clicks export button",
           "then": "Summary is copied to clipboard or downloaded with key stats and CarbonStamp branding",
           "priority": "medium",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-040",
@@ -529,11 +529,11 @@
           "when": "User opens popup",
           "then": "Friendly empty state message is shown; no errors",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         }
       ],
-      "status": "not-started",
-      "testFile": null
+      "status": "passing",
+      "testFile": "tests/unit/score-card.test.tsx, tests/unit/resource-breakdown.test.tsx, tests/unit/dashboard.test.tsx, tests/unit/top-sites-chart.test.tsx"
     },
     {
       "id": "TS-008",
@@ -636,5 +636,5 @@
     }
   ],
   "totalTests": 58,
-  "passingTests": 42
+  "passingTests": 50
 }

@@ -1,7 +1,7 @@
 {
   "project": "CarbonStamp",
   "version": "1.0",
-  "lastUpdated": "2026-04-14",
+  "lastUpdated": "2026-04-16",
   "backlog": [
     {
       "id": "CS-000a",
@@ -241,9 +241,9 @@
         "Shows percentile comparison text"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-009-score-card",
+      "completedDate": "2026-04-15"
     },
     {
       "id": "CS-010",
@@ -259,9 +259,9 @@
         "Visual bar or chart representation of proportions"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-010-resource-breakdown",
+      "completedDate": "2026-04-15"
     },
     {
       "id": "CS-011",
@@ -277,9 +277,9 @@
         "Data sourced from totals:{YYYY-MM-DD} storage entries"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-011-dashboard-totals",
+      "completedDate": "2026-04-16"
     },
     {
       "id": "CS-012",
@@ -295,9 +295,9 @@
         "Chart is responsive within popup dimensions"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-012-top-sites-chart",
+      "completedDate": "2026-04-16"
     },
     {
       "id": "CS-013",
