@@ -1,7 +1,7 @@
 {
   "project": "CarbonStamp",
   "version": "1.0",
-  "lastUpdated": "2026-04-16",
+  "lastUpdated": "2026-04-18",
   "testStrategy": {
     "unitTestFramework": "Vitest",
     "e2eFramework": "Playwright",
@@ -407,7 +407,7 @@
         }
       ],
       "status": "passing",
-      "testFile": "tests/unit/storage.test.ts"
+      "testFile": "tests/unit/storage.test.ts, tests/unit/cleanup.test.ts"
     },
     {
       "id": "TS-006",
@@ -547,7 +547,7 @@
           "when": "Developer mode is toggled on",
           "then": "Per-resource list with optimisation flags is shown",
           "priority": "high",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-042",
@@ -556,7 +556,7 @@
           "when": "Developer mode analyses resources",
           "then": "Uncompressed images are flagged with estimated carbon saving",
           "priority": "medium",
-          "status": "not-implemented"
+          "status": "passing"
         },
         {
           "id": "T-043",
@@ -565,11 +565,11 @@
           "when": "Developer mode analyses resources",
           "then": "Render-blocking scripts are flagged",
           "priority": "medium",
-          "status": "not-implemented"
+          "status": "passing"
         }
       ],
-      "status": "not-started",
-      "testFile": null
+      "status": "passing",
+      "testFile": "tests/unit/dev-mode.test.tsx"
     },
     {
       "id": "TS-009",
@@ -636,5 +636,5 @@
     }
   ],
   "totalTests": 58,
-  "passingTests": 50
+  "passingTests": 53
 }

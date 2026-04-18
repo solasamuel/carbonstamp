@@ -1,7 +1,7 @@
 {
   "project": "CarbonStamp",
   "version": "1.0",
-  "lastUpdated": "2026-04-16",
+  "lastUpdated": "2026-04-18",
   "backlog": [
     {
       "id": "CS-000a",
@@ -314,9 +314,9 @@
         "Comparisons use standard conversion factors"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-013-annual-estimate",
+      "completedDate": "2026-04-17"
     },
     {
       "id": "CS-014",
@@ -332,9 +332,9 @@
         "Includes CarbonStamp branding"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-014-export",
+      "completedDate": "2026-04-18"
     },
     {
       "id": "CS-015",
@@ -353,9 +353,9 @@
         "Shows estimated carbon saving if optimisations applied"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-015-dev-mode",
+      "completedDate": "2026-04-18"
     },
     {
       "id": "CS-016",
@@ -371,9 +371,9 @@
         "Expired geo_cache and green_cache entries are also cleaned"
       ],
       "evening": 2,
-      "status": "todo",
-      "branch": null,
-      "completedDate": null
+      "status": "done",
+      "branch": "feature/CS-016-cleanup",
+      "completedDate": "2026-04-18"
     },
     {
       "id": "CS-017",
