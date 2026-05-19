@@ -37,42 +37,63 @@ export default function OptionsPage({ onSaved }: OptionsPageProps = {}) {
 
       <div className="key-field">
         <label htmlFor="ip2location-key">
-          ip2location.io API Key
+          <span className="key-step">1</span> ip2location.io API Key
         </label>
         <input
           id="ip2location-key"
           type="text"
           value={ip2locationKey}
           onChange={(e) => setIp2locationKey(e.target.value)}
-          placeholder="Enter your ip2location.io key"
+          placeholder="Paste your ip2location.io key here"
         />
         <span className="key-help">
-          Free at <a href="https://www.ip2location.io/" target="_blank" rel="noreferrer">ip2location.io</a> — 30K requests/month
+          Don't have one?{" "}
+          <a
+            href="https://www.ip2location.io/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sign up free at ip2location.io
+          </a>{" "}
+          (30K requests / month)
         </span>
       </div>
 
       <div className="key-field">
         <label htmlFor="electricity-maps-key">
-          Electricity Maps API Key
+          <span className="key-step">2</span> Electricity Maps API Key
         </label>
         <input
           id="electricity-maps-key"
           type="text"
           value={electricityMapsKey}
           onChange={(e) => setElectricityMapsKey(e.target.value)}
-          placeholder="Enter your Electricity Maps key"
+          placeholder="Paste your Electricity Maps key here"
         />
         <span className="key-help">
-          Free at <a href="https://api.electricitymap.org/" target="_blank" rel="noreferrer">electricitymap.org</a>
+          Don't have one?{" "}
+          <a
+            href="https://api.electricitymap.org/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sign up free at electricitymap.org
+          </a>
         </span>
       </div>
 
       <div className="key-field">
-        <label>Green Web Foundation</label>
+        <label>
+          <span className="key-step done">&#10003;</span> Green Web Foundation
+        </label>
         <span className="key-info">No key required — free unlimited access</span>
       </div>
 
-      <button className="save-button" onClick={handleSave}>
+      <button
+        className="save-button"
+        onClick={handleSave}
+        disabled={!ip2locationKey || !electricityMapsKey}
+      >
         Save Keys
       </button>
 
