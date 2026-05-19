@@ -43,7 +43,13 @@ export default function App() {
         </header>
         {!keysConfigured && (
           <div className="setup-banner">
-            <p>Set up your free API keys to start tracking your browsing carbon footprint.</p>
+            <strong>Setup required — bring your own API keys</strong>
+            <p>
+              CarbonStamp needs two free API keys before it can analyse pages.
+              Sign up below (takes about 2 minutes), paste your keys here, and
+              you're done. Your keys are stored locally and never leave your
+              browser.
+            </p>
           </div>
         )}
         <OptionsPage

@@ -129,6 +129,13 @@ body {
   border-bottom: 1px solid #c8e6c9;
 }
 
+.setup-banner strong {
+  display: block;
+  font-size: 13px;
+  color: #2e7d32;
+  margin-bottom: 4px;
+}
+
 .setup-banner p {
   font-size: 12px;
   color: #2e7d32;
@@ -492,11 +499,32 @@ body {
 }
 
 .key-field label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   font-weight: 600;
   color: #1a1a2e;
   margin-bottom: 4px;
+}
+
+.key-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1a1a2e;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.key-step.done {
+  background: #27ae60;
+  font-size: 11px;
 }
 
 .key-field input {
@@ -558,8 +586,13 @@ body {
   margin-top: 4px;
 }
 
-.save-button:hover {
+.save-button:hover:not(:disabled) {
   background: #219a52;
+}
+
+.save-button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
 }
 
 .saved-message {

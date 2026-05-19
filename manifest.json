@@ -6,8 +6,7 @@
   "permissions": [
     "storage",
     "alarms",
-    "activeTab",
-    "tabs"
+    "activeTab"
   ],
   "host_permissions": [
     "https://api.ip2location.io/*",
