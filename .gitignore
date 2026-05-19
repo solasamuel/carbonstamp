@@ -3,3 +3,4 @@ dist/
 .env
 *.zip
 test-results/
+.claude/settings.json
