@@ -1,13 +1,16 @@
 {
   "project": "CarbonStamp",
   "version": "1.0",
-  "lastUpdated": "2026-04-12",
+  "lastUpdated": "2026-04-18",
   "testStrategy": {
     "unitTestFramework": "Vitest",
     "e2eFramework": "Playwright",
     "extensionTestingLibrary": "webextensions-jsdom",
     "coverageTarget": "80%",
-    "browsers": ["Chrome", "Firefox"]
+    "browsers": [
+      "Chrome",
+      "Firefox"
+    ]
   },
   "testSuites": [
     {
@@ -21,7 +24,8 @@
           "given": "A clean clone of the repository",
           "when": "npm install is run",
           "then": "All dependencies install successfully with no peer dependency conflicts",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S02",
@@ -29,7 +33,8 @@
           "given": "Project with all source files",
           "when": "npx tsc --noEmit is run",
           "then": "Zero type errors reported",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S03",
@@ -37,7 +42,8 @@
           "given": "API keys configured in .env",
           "when": "npm run dev is run",
           "then": "Vite dev server starts, dist/ contains a valid manifest.json, and extension loads in Chrome without errors",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S04",
@@ -45,7 +51,8 @@
           "given": "API keys configured in .env",
           "when": "npm run build is run",
           "then": "dist/ contains minified bundles for background worker, content script, and popup with valid manifest.json",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S05",
@@ -53,7 +60,8 @@
           "given": "VITE_IP2LOCATION_API_KEY and VITE_ELECTRICITY_MAPS_API_KEY set in .env",
           "when": "Background worker accesses import.meta.env",
           "then": "Both API key values are accessible and non-empty",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S06",
@@ -61,7 +69,8 @@
           "given": "A .env file exists with real API keys",
           "when": "git status is run",
           "then": ".env does not appear in tracked or untracked files",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-S07",
@@ -69,7 +78,8 @@
           "given": "Production build completed",
           "when": "dist/ is loaded via chrome://extensions as unpacked extension",
           "then": "Extension appears with correct name, icon, and no console errors",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S08",
@@ -77,7 +87,8 @@
           "given": "Production build completed",
           "when": "dist/manifest.json is loaded via about:debugging",
           "then": "Extension appears with correct name, icon, and no console errors",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-S09",
@@ -85,7 +96,8 @@
           "given": "Types defined in shared/types.ts",
           "when": "Background, content, and popup modules import from @shared/types",
           "then": "Imports resolve correctly and TypeScript validates usage",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-S10",
@@ -93,9 +105,12 @@
           "given": "Production build completed",
           "when": "npm run package is run",
           "then": "Zip files are created for Chrome and Firefox submission, containing all required assets",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/smoke.test.ts"
     },
     {
       "id": "TS-001",
@@ -108,7 +123,8 @@
           "given": "A page with 15 resources (images, scripts, CSS, fonts)",
           "when": "Page load completes and content script fires",
           "then": "All 15 resource entries are captured with transferSize values",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-002",
@@ -116,7 +132,8 @@
           "given": "Resource entries with various initiatorType values",
           "when": "Content script processes the entries",
           "then": "Each resource is categorised as image, script, font, CSS, or other",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-003",
@@ -124,7 +141,8 @@
           "given": "A page with no external resources",
           "when": "Content script fires",
           "then": "Empty resource list is sent to background worker without error",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         },
         {
           "id": "T-004",
@@ -132,7 +150,8 @@
           "given": "Resources served from browser cache with transferSize = 0",
           "when": "Content script processes entries",
           "then": "Zero-size resources are included but flagged as cached",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         },
         {
           "id": "T-005",
@@ -140,9 +159,12 @@
           "given": "Resources have been collected and categorised",
           "when": "Content script completes processing",
           "then": "chrome.runtime.sendMessage is called with structured payload",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/content-script.test.ts"
     },
     {
       "id": "TS-002",
@@ -155,7 +177,8 @@
           "given": "A domain name 'example.com'",
           "when": "Geolocation lookup is triggered",
           "then": "API returns country code and result is cached for 24 hours",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-007",
@@ -163,7 +186,8 @@
           "given": "A geo_cache entry for 'example.com' less than 24 hours old",
           "when": "Same domain is looked up again",
           "then": "Cached result is returned; no API call is made",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-008",
@@ -171,7 +195,8 @@
           "given": "A geo_cache entry for 'example.com' older than 24 hours",
           "when": "Same domain is looked up again",
           "then": "API is called and cache is refreshed",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-009",
@@ -179,7 +204,8 @@
           "given": "Country code 'NO' (Norway)",
           "when": "Carbon intensity lookup is triggered",
           "then": "Returns ~30 gCO2/kWh and result is cached for 1 hour",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-010",
@@ -187,7 +213,8 @@
           "given": "Electricity Maps API returns error or times out",
           "when": "Carbon intensity lookup is triggered",
           "then": "Falls back to 442 gCO2/kWh (global average)",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-011",
@@ -195,7 +222,8 @@
           "given": "A domain 'google.com' known to be green-hosted",
           "when": "Green hosting check is triggered",
           "then": "Returns is_green: true and caches result",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-012",
@@ -203,7 +231,8 @@
           "given": "Green Web Foundation API is unreachable",
           "when": "Green hosting check is triggered",
           "then": "Defaults to is_green: false (conservative estimate)",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-013",
@@ -211,9 +240,12 @@
           "given": "ip2location.io API returns error",
           "when": "Geolocation lookup is triggered",
           "then": "Falls back gracefully; uses global average carbon intensity",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/geolocation.test.ts, tests/unit/carbon-intensity.test.ts, tests/unit/green-hosting.test.ts"
     },
     {
       "id": "TS-003",
@@ -226,7 +258,8 @@
           "given": "Transfer size: 2MB, carbon intensity: 442 gCO2/kWh, not green-hosted",
           "when": "Carbon calculation is run with visitor_factor = 1.0",
           "then": "co2_grams matches formula: (data_gb * 0.81 * 1.0 * 442) + (data_gb * 0.52 * 0.25 * 442)",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-015",
@@ -234,7 +267,8 @@
           "given": "Same page visited a second time",
           "when": "Carbon calculation is run",
           "then": "visitor_factor is 0.75, reducing the score by 25%",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-016",
@@ -242,7 +276,8 @@
           "given": "Page is on a green-hosted domain",
           "when": "Carbon calculation is run",
           "then": "Data centre energy component is zeroed out",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-017",
@@ -250,7 +285,8 @@
           "given": "Transfer size is 0 bytes (fully cached page)",
           "when": "Carbon calculation is run",
           "then": "Returns 0 grams CO2 without error",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         },
         {
           "id": "T-018",
@@ -258,7 +294,8 @@
           "given": "Transfer size: 2MB, carbon intensity: 30 gCO2/kWh (Norway)",
           "when": "Carbon calculation is run",
           "then": "CO2 output is significantly lower than global average calculation",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-019",
@@ -266,9 +303,12 @@
           "given": "Transfer size: 2MB, carbon intensity: 700 gCO2/kWh (Poland)",
           "when": "Carbon calculation is run",
           "then": "CO2 output is significantly higher than global average calculation",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/carbon-calculator.test.ts"
     },
     {
       "id": "TS-004",
@@ -281,7 +321,8 @@
           "given": "CO2 result under the A+ threshold",
           "when": "Grade is assigned",
           "then": "Returns 'A+'",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-021",
@@ -289,7 +330,8 @@
           "given": "CO2 result above the F threshold",
           "when": "Grade is assigned",
           "then": "Returns 'F'",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-022",
@@ -297,7 +339,8 @@
           "given": "100 previously analysed pages with known CO2 values",
           "when": "A new page is graded",
           "then": "Percentile text reads 'heavier than X% of 101 pages analysed' and X is accurate",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-023",
@@ -305,9 +348,12 @@
           "given": "Any valid CO2 value >= 0",
           "when": "Grade is assigned",
           "then": "Exactly one grade is returned (no overlaps or gaps in thresholds)",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/grading.test.ts"
     },
     {
       "id": "TS-005",
@@ -320,7 +366,8 @@
           "given": "Analysis complete for example.com on 2026-04-12",
           "when": "Result is persisted",
           "then": "Stored under key 'page:example.com:2026-04-12' with expected fields",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-025",
@@ -328,7 +375,8 @@
           "given": "Existing entry for page:example.com:2026-04-12 with visits: 2",
           "when": "Same page is visited again on same date",
           "then": "visits field incremented to 3; CO2 values are averaged/accumulated",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-026",
@@ -336,7 +384,8 @@
           "given": "Existing totals for 2026-04-12 with total_co2_grams: 50, page_count: 10",
           "when": "New page analysed with 3 grams CO2",
           "then": "totals:2026-04-12 updated to total_co2_grams: 53, page_count: 11",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-027",
@@ -344,7 +393,8 @@
           "given": "Storage contains entries from 100 days ago",
           "when": "Daily cleanup alarm fires",
           "then": "Entries older than 90 days are removed; recent entries remain",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-028",
@@ -352,9 +402,12 @@
           "given": "Expired geo_cache and green_cache entries exist",
           "when": "Daily cleanup alarm fires",
           "then": "Expired cache entries are removed",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/storage.test.ts, tests/unit/cleanup.test.ts"
     },
     {
       "id": "TS-006",
@@ -367,7 +420,8 @@
           "given": "Page analysis returns grade 'B'",
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeText called with 'B'",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-030",
@@ -375,7 +429,8 @@
           "given": "Page analysis returns grade 'A'",
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeBackgroundColor called with '#27AE60'",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-031",
@@ -383,7 +438,8 @@
           "given": "Page analysis returns grade 'C'",
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeBackgroundColor called with '#F39C12'",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-032",
@@ -391,9 +447,12 @@
           "given": "Page analysis returns grade 'F'",
           "when": "Badge is updated",
           "then": "chrome.action.setBadgeBackgroundColor called with '#E74C3C'",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/badge.test.ts"
     },
     {
       "id": "TS-007",
@@ -406,7 +465,8 @@
           "given": "Current tab has been analysed",
           "when": "User opens the popup",
           "then": "Grade, CO2 grams, transfer size, energy, and green host status are displayed",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-034",
@@ -414,7 +474,8 @@
           "given": "Current page has resources across multiple categories",
           "when": "User views resource breakdown",
           "then": "Breakdown shows images, scripts, fonts, CSS, other with sizes",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-035",
@@ -422,7 +483,8 @@
           "given": "User has 7 days of browsing history",
           "when": "User switches between daily/weekly/monthly views",
           "then": "Correct aggregated CO2 and page counts are shown",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-036",
@@ -430,7 +492,8 @@
           "given": "User has visited 15+ unique domains",
           "when": "Dashboard is opened",
           "then": "D3.js horizontal bar chart shows top 10 by average CO2 per visit",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "passing"
         },
         {
           "id": "T-037",
@@ -438,7 +501,8 @@
           "given": "User has visited only 3 unique domains",
           "when": "Dashboard is opened",
           "then": "Chart shows 3 bars without error",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         },
         {
           "id": "T-038",
@@ -446,7 +510,8 @@
           "given": "User has at least 7 days of data",
           "when": "Annual estimate section is viewed",
           "then": "Shows estimated annual CO2, km driven, flights, and meals of beef equivalents",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-039",
@@ -454,7 +519,8 @@
           "given": "User has browsing history data",
           "when": "User clicks export button",
           "then": "Summary is copied to clipboard or downloaded with key stats and CarbonStamp branding",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         },
         {
           "id": "T-040",
@@ -462,9 +528,12 @@
           "given": "Fresh install with no browsing history",
           "when": "User opens popup",
           "then": "Friendly empty state message is shown; no errors",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/score-card.test.tsx, tests/unit/resource-breakdown.test.tsx, tests/unit/dashboard.test.tsx, tests/unit/top-sites-chart.test.tsx"
     },
     {
       "id": "TS-008",
@@ -477,7 +546,8 @@
           "given": "User is in standard mode",
           "when": "Developer mode is toggled on",
           "then": "Per-resource list with optimisation flags is shown",
-          "priority": "high"
+          "priority": "high",
+          "status": "passing"
         },
         {
           "id": "T-042",
@@ -485,7 +555,8 @@
           "given": "Page has images without content-encoding",
           "when": "Developer mode analyses resources",
           "then": "Uncompressed images are flagged with estimated carbon saving",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         },
         {
           "id": "T-043",
@@ -493,9 +564,12 @@
           "given": "Page has scripts without async/defer attributes",
           "when": "Developer mode analyses resources",
           "then": "Render-blocking scripts are flagged",
-          "priority": "medium"
+          "priority": "medium",
+          "status": "passing"
         }
-      ]
+      ],
+      "status": "passing",
+      "testFile": "tests/unit/dev-mode.test.tsx"
     },
     {
       "id": "TS-009",
@@ -508,7 +582,8 @@
           "given": "Extension is installed in Chrome",
           "when": "User navigates to any webpage",
           "then": "Badge updates, popup shows results, storage is populated",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "not-implemented"
         },
         {
           "id": "T-045",
@@ -516,7 +591,8 @@
           "given": "Extension is installed in Firefox",
           "when": "User navigates to any webpage",
           "then": "Badge updates, popup shows results, storage is populated",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "not-implemented"
         },
         {
           "id": "T-046",
@@ -524,9 +600,12 @@
           "given": "Extension running in Chrome and Firefox",
           "when": "Page with resources is loaded",
           "then": "transferSize values are captured in both browsers",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "not-implemented"
         }
-      ]
+      ],
+      "status": "not-started",
+      "testFile": null
     },
     {
       "id": "TS-010",
@@ -539,7 +618,8 @@
           "given": "Extension is running and analysing pages",
           "when": "Network requests are monitored",
           "then": "Only calls to ip2location.io, Electricity Maps, and Green Web Foundation are made",
-          "priority": "critical"
+          "priority": "critical",
+          "status": "not-implemented"
         },
         {
           "id": "T-048",
@@ -547,9 +627,14 @@
           "given": "90 days of heavy browsing (500 unique domains/day)",
           "when": "Storage usage is measured",
           "then": "Total storage remains well under 10MB",
-          "priority": "high"
+          "priority": "high",
+          "status": "not-implemented"
         }
-      ]
+      ],
+      "status": "not-started",
+      "testFile": null
     }
-  ]
+  ],
+  "totalTests": 58,
+  "passingTests": 53
 }

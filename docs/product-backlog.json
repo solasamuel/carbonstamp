@@ -1,7 +1,7 @@
 {
   "project": "CarbonStamp",
   "version": "1.0",
-  "lastUpdated": "2026-04-12",
+  "lastUpdated": "2026-04-18",
   "backlog": [
     {
       "id": "CS-000a",
@@ -10,6 +10,9 @@
       "description": "Scaffold the extension project using Vite with @crxjs/vite-plugin. Configure TypeScript, React, and the Manifest V3 entry points (background service worker, content script, popup). Install core dependencies: react, react-dom, d3, webextension-polyfill.",
       "priority": "P0",
       "storyPoints": 2,
+      "status": "done",
+      "branch": "feature/CS-000a-project-scaffold",
+      "completedDate": "2026-04-12",
       "acceptance": [
         "npm create vite scaffolds a working TypeScript + React project",
         "@crxjs/vite-plugin is installed and configured in vite.config.ts",
@@ -28,6 +31,9 @@
       "description": "Set up .env file for API keys (ip2location.io, Electricity Maps). Create .env.example with placeholder values. Add .env to .gitignore. Wire VITE_* env vars through to the background worker.",
       "priority": "P0",
       "storyPoints": 1,
+      "status": "done",
+      "branch": "feature/CS-000b-env-config",
+      "completedDate": "2026-04-12",
       "acceptance": [
         ".env.example exists with VITE_IP2LOCATION_API_KEY and VITE_ELECTRICITY_MAPS_API_KEY placeholders",
         ".env is in .gitignore",
@@ -43,6 +49,9 @@
       "description": "Install and configure Vitest for unit tests and Playwright for cross-browser E2E tests. Set up test directory structure, mock chrome.* APIs via webextensions-jsdom, and add npm scripts for test/test:e2e.",
       "priority": "P0",
       "storyPoints": 2,
+      "status": "done",
+      "branch": "feature/CS-000c-testing-infra",
+      "completedDate": "2026-04-13",
       "acceptance": [
         "Vitest is configured with TypeScript support",
         "webextensions-jsdom is installed for mocking chrome.* APIs in unit tests",
@@ -60,6 +69,9 @@
       "description": "Create the directory layout: src/background/, src/content/, src/popup/components/, src/popup/hooks/, src/shared/, tests/unit/, tests/e2e/, icons/. Scaffold shared/types.ts with core TypeScript interfaces and shared/constants.ts with grade thresholds, badge colours, and conversion factors.",
       "priority": "P0",
       "storyPoints": 1,
+      "status": "done",
+      "branch": "feature/CS-000d-shared-modules",
+      "completedDate": "2026-04-13",
       "acceptance": [
         "All directories from the project structure exist",
         "shared/types.ts exports interfaces: PageResult, DailyTotal, GeoCache, GreenCache, ResourceEntry",
@@ -75,6 +87,9 @@
       "description": "Content script reads window.performance.getEntriesByType('resource') on page load complete, extracts transferSize and decodedBodySize per resource, and categorises by type (image, script, font, CSS, other).",
       "priority": "P0",
       "storyPoints": 3,
+      "status": "done",
+      "branch": "feature/CS-001-resource-collection",
+      "completedDate": "2026-04-13",
       "acceptance": [
         "Content script fires after page load complete",
         "All resource entries are captured with transferSize in bytes",
@@ -90,6 +105,9 @@
       "description": "Background worker extracts domain from page URL and resolves hosting country via ip2location.io API. Results are cached in chrome.storage.local for 24 hours.",
       "priority": "P0",
       "storyPoints": 2,
+      "status": "done",
+      "branch": "feature/CS-002-geolocation",
+      "completedDate": "2026-04-13",
       "acceptance": [
         "Domain extracted from document.location.hostname",
         "ip2location.io API called with hostname (not IP)",
@@ -105,6 +123,9 @@
       "description": "Background worker maps the hosting country to real-time grid carbon intensity (gCO2/kWh) using the Electricity Maps API. Results are cached hourly.",
       "priority": "P0",
       "storyPoints": 2,
+      "status": "done",
+      "branch": "feature/CS-003-carbon-intensity",
+      "completedDate": "2026-04-14",
       "acceptance": [
         "Electricity Maps API called with country code from geolocation result",
         "Returns carbon intensity in gCO2/kWh",
@@ -120,6 +141,9 @@
       "description": "Background worker checks whether the page's hosting provider is on the Green Web Foundation green hosting registry. Returns a boolean. Cached per domain.",
       "priority": "P0",
       "storyPoints": 1,
+      "status": "done",
+      "branch": "feature/CS-004-green-hosting",
+      "completedDate": "2026-04-14",
       "acceptance": [
         "Green Web Foundation API called with domain",
         "Boolean is_green stored under green_cache:{domain}",
@@ -135,6 +159,9 @@
       "description": "Implement the websitecarbon.com open methodology: co2_grams = (data_gb * 0.81 * visitor_factor * carbon_intensity) + (data_gb * 0.52 * 0.25 * 442). Returning visitor adjustment is 0.75x for previously visited pages. Green hosting zeroes out data centre energy component.",
       "priority": "P0",
       "storyPoints": 3,
+      "status": "done",
+      "branch": "feature/CS-005-carbon-calculator",
+      "completedDate": "2026-04-14",
       "acceptance": [
         "Formula matches websitecarbon.com methodology",
         "Returning visitor factor (0.75x) applied for repeat visits",
@@ -150,6 +177,9 @@
       "description": "Assign a letter grade based on CO2 per page load, using thresholds aligned with websitecarbon.com methodology for credibility. Generate percentile comparison against all previously analysed pages.",
       "priority": "P0",
       "storyPoints": 2,
+      "status": "done",
+      "branch": "feature/CS-006-grading",
+      "completedDate": "2026-04-14",
       "acceptance": [
         "Grades range from A+ (cleanest) to F (dirtiest)",
         "Thresholds are consistent with websitecarbon.com grading",
@@ -171,7 +201,10 @@
         "Visit count incremented on repeat visits to same domain/date",
         "Storage remains within chrome.storage.local 10MB limit"
       ],
-      "evening": 1
+      "evening": 1,
+      "status": "done",
+      "branch": "feature/CS-007-storage",
+      "completedDate": "2026-04-14"
     },
     {
       "id": "CS-008",
@@ -187,7 +220,10 @@
         "Badge background colour is red (#E74C3C) for D/F",
         "Badge updates automatically on each page load"
       ],
-      "evening": 1
+      "evening": 1,
+      "status": "done",
+      "branch": "feature/CS-008-badge",
+      "completedDate": "2026-04-14"
     },
     {
       "id": "CS-009",
@@ -204,7 +240,10 @@
         "Shows green hosting status (green/conventional)",
         "Shows percentile comparison text"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-009-score-card",
+      "completedDate": "2026-04-15"
     },
     {
       "id": "CS-010",
@@ -219,7 +258,10 @@
         "Sorted by size descending (heaviest first)",
         "Visual bar or chart representation of proportions"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-010-resource-breakdown",
+      "completedDate": "2026-04-15"
     },
     {
       "id": "CS-011",
@@ -234,7 +276,10 @@
         "Displays total page count for selected period",
         "Data sourced from totals:{YYYY-MM-DD} storage entries"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-011-dashboard-totals",
+      "completedDate": "2026-04-16"
     },
     {
       "id": "CS-012",
@@ -249,7 +294,10 @@
         "Each bar labelled with domain name and average grams CO2",
         "Chart is responsive within popup dimensions"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-012-top-sites-chart",
+      "completedDate": "2026-04-16"
     },
     {
       "id": "CS-013",
@@ -265,7 +313,10 @@
         "Comparison to meals of beef",
         "Comparisons use standard conversion factors"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-013-annual-estimate",
+      "completedDate": "2026-04-17"
     },
     {
       "id": "CS-014",
@@ -280,7 +331,10 @@
         "Output is shareable (clipboard text or downloadable image)",
         "Includes CarbonStamp branding"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-014-export",
+      "completedDate": "2026-04-18"
     },
     {
       "id": "CS-015",
@@ -298,7 +352,10 @@
         "Flags resources not served via CDN",
         "Shows estimated carbon saving if optimisations applied"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-015-dev-mode",
+      "completedDate": "2026-04-18"
     },
     {
       "id": "CS-016",
@@ -313,7 +370,10 @@
         "Both page:{domain}:{date} and totals:{YYYY-MM-DD} entries are pruned",
         "Expired geo_cache and green_cache entries are also cleaned"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "done",
+      "branch": "feature/CS-016-cleanup",
+      "completedDate": "2026-04-18"
     },
     {
       "id": "CS-017",
@@ -328,7 +388,10 @@
         "Manifest v2/v3 compatibility handled",
         "Submitted to Firefox Add-ons store"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "todo",
+      "branch": null,
+      "completedDate": null
     },
     {
       "id": "CS-018",
@@ -343,7 +406,10 @@
         "Privacy policy reflects local-only data storage",
         "Published and publicly available"
       ],
-      "evening": 2
+      "evening": 2,
+      "status": "todo",
+      "branch": null,
+      "completedDate": null
     }
   ]
 }
