@@ -120,6 +120,3 @@ co2_grams = (data_gb × 0.81 × visitor_factor × carbon_intensity)
 
 ISC — see `package.json`.
 
-## Author
-
-**Sola Samuel** — founder of [Green Atlas](https://greenatlas.example), a circular economy manufacturing business. CarbonStamp grew from wanting to understand the carbon cost of digital tools alongside physical supply chains.
