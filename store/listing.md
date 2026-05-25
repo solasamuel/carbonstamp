@@ -95,8 +95,9 @@ CarbonStamp asks for the minimum permissions needed:
 - **alarms** — to run the daily cleanup job that prunes data older than 90 days
 - **activeTab** — to read the URL of the page you're currently looking at (only when you open the popup)
 - **host permissions** for `api.ip2location.io`, `api.electricitymap.org`, `api.thegreenwebfoundation.org` — the three APIs that power the carbon estimate
+- **content script access on all sites** — required so the extension can read transferred bytes (via the browser's PerformanceResourceTiming API) on every page you visit. The script reads **only** the transfer size of each loaded resource — it cannot and does not read page content, form inputs, cookies, passwords, or any element of the page itself. This access is the minimum needed to build a meaningful personal carbon footprint, because that footprint depends on every page you load — not a fixed list of sites.
 
-CarbonStamp does NOT request `tabs`, `history`, `webRequest`, or any permission that would let it see your browsing across other tabs.
+CarbonStamp does NOT request `tabs`, `history`, `webRequest`, `cookies`, or any permission that would let it see your browsing across other tabs, your browser history, or your network traffic.
 
 ---
 
@@ -129,8 +130,19 @@ Required to schedule a once-daily cleanup task that removes page history older t
 ### `activeTab`
 Required only to read the URL of the active tab when the user clicks the extension icon. The popup needs the current page's hostname to display that page's carbon score. We deliberately use `activeTab` instead of the broader `tabs` permission because we only need access at the moment the user invokes the popup.
 
-### Content script on `<all_urls>`
-Required because the carbon footprint estimate is meaningful only if the extension can read the `PerformanceResourceTiming` entries on every page the user visits. The content script reads only performance timing data (transferred bytes per resource) — it never reads page content, form data, cookies, or DOM. Restricting it to specific URL patterns would defeat the extension's purpose.
+### Content script on `<all_urls>` — addressing the broad host permissions concern
+
+We reviewed the Chrome Web Store guidance on broad host permissions and considered both `activeTab` and narrower `host_permissions` patterns. Neither is workable for CarbonStamp's single purpose, for these specific reasons:
+
+**Why `activeTab` is insufficient.** `activeTab` only grants access in response to a user gesture (clicking the extension icon). The core value of CarbonStamp is *passive, ambient* carbon awareness — the badge icon must update silently as the user browses, building up a personal dashboard of their actual browsing patterns. Requiring the user to click the icon on every page would (a) defeat the product's purpose, (b) miss the vast majority of pages the user actually visits, and (c) make the dashboard's daily/weekly/monthly totals meaningless because data would only exist for pages the user manually inspected.
+
+**Why narrower `host_permissions` are insufficient.** The extension's value depends on measuring carbon across the user's *entire* browsing pattern. A user's personal footprint over a week is a function of every page they load — narrowing to a fixed list of sites would produce a fictional dashboard that excludes most of their actual browsing. There is no defensible static list of "carbon-relevant" websites; carbon-relevance is universal.
+
+**Strict scope of what the content script accesses.** The content script reads exactly one browser API: `window.performance.getEntriesByType("resource")`. From each entry it extracts only four numeric/string fields: resource URL, `initiatorType`, `transferSize`, and `decodedBodySize`. It **never** reads page content, DOM, form inputs, cookies, `localStorage`, `sessionStorage`, network responses, or any element of the page itself. The full source of the content script is ~20 lines and is open source — reviewers can audit it directly.
+
+**Data minimisation.** Only the page's *hostname* (not the full URL) is sent to the three external APIs. Page content is never transmitted anywhere. All historical data is stored locally and auto-deleted after 90 days.
+
+In short: `<all_urls>` is requested because the product's single purpose — estimating personal browsing carbon footprint — is intrinsically universal, but the access is used for the narrowest possible data extraction (page transfer size, nothing else).
 
 ### Host permissions: `api.ip2location.io`, `api.electricitymap.org`, `api.thegreenwebfoundation.org`
 Required to call the three APIs that supply the data needed to compute a carbon estimate: hosting country, grid carbon intensity, and green hosting status. Only the page's hostname is sent — never full URLs or content.
